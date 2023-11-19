@@ -1,1 +1,1 @@
-export const server = "http://localhost:9000/api";
+export const server = "https://quick-memo-server1.onrender.com/api";
