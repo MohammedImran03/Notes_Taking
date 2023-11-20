@@ -47,7 +47,7 @@ const Signup = () => {
           if(status === "success"){
             setTimeout(()=>{
               navigate("/sign-in");
-            },1500);
+            },2000);
           }
         }
       });
