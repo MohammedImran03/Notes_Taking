@@ -44,11 +44,11 @@ const Signup = () => {
           // }
           // console.log(values);
           dispatch(newUserRegistration(values));
-          // if(status === "success"){
-          //   setTimeout(()=>{
-          //     navigate("/sign");
-          //   },1500);
-          // }
+          if(status === "success"){
+            setTimeout(()=>{
+              navigate("/sign-in");
+            },1500);
+          }
         }
       });
       function clearresponsetab(){
