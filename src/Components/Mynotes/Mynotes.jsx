@@ -5,12 +5,12 @@ import styles from "../../styles/styles";
 const Mynotes = () => {
   const dispatch = useDispatch();
   const { searchTicketList, isLoading, error } = useSelector((state) => state.Usernotes);
-  const { isAuth,userdata } = useSelector((state) => state.login);
+  const { userdata } = useSelector((state) => state.login);
   useEffect(() => {
     // if(userdata){
       dispatch(fetchusersAllNotes(userdata._id));
       console.log(searchTicketList);
-      console.log(userdata._id)
+      console.log(userdata._id);
     // }
   }, []);
   return (
