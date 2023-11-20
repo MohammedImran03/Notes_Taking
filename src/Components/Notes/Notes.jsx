@@ -111,10 +111,7 @@ const Notes = () => {
               Notes here are stored permanently.
             </p>
           </button>
-
-          <a
-            href="#"
-            class="block max-w-sm p-4 bg-orange-500 border border-gray-200 rounded-lg shadow hover:bg-orange-400 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+          <a class="block max-w-sm p-4 bg-orange-500 border border-gray-200 rounded-lg shadow hover:bg-orange-400 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
           >
             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white flex justify-center">
               <IoMdAdd size={100} />
@@ -127,8 +124,7 @@ const Notes = () => {
             </p>
           </a>
 
-          <a
-            href="#"
+          <a 
             class="block max-w-sm p-4 bg-green-500 border border-gray-200 rounded-lg shadow hover:bg-green-400 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
           >
             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white flex justify-center">
