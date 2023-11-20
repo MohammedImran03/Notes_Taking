@@ -3,12 +3,12 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {LoginPage,Signuppage,ActivationPage,HomePage,NotesPage,Writerpage} from "./Routes.js"; 
 import store from "./store";
-import {loadUser } from "./Redux/action/user";
+// import {loadUser } from "./Redux/action/user";
 import ProtectedRoute from "./ProtectedRoute/Privateroute";
 const App=()=>{
-  useEffect(() => {
-    store.dispatch(loadUser());
-  }, []);
+  // useEffect(() => {
+  //   store.dispatch(loadUser());
+  // }, []);
   return (
    <BrowserRouter>
    <Routes>
