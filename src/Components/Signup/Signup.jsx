@@ -45,9 +45,9 @@ const Signup = () => {
           // console.log(values);
           dispatch(newUserRegistration(values));
           if(status === "success"){
-            setTimeout(()=>{
+            // setTimeout(()=>{
               navigate("/sign-in");
-            },2000);
+            // },2000);
           }
         }
       });
