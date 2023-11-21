@@ -4,4 +4,5 @@ import ActivationPage from "../src/pages/Activationpage.jsx";
 import HomePage from "../src/pages/HomePage.jsx";
 import NotesPage from "../src/pages/NotesPage.jsx";
 import Writerpage from "./pages/Writerpage.jsx";
-export { LoginPage, Signuppage, ActivationPage, HomePage, NotesPage,Writerpage };
+import Editnotepage from "./pages/Editnotepage.jsx";
+export { LoginPage, Signuppage, ActivationPage, HomePage, NotesPage,Writerpage,Editnotepage };

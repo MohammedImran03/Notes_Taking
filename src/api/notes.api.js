@@ -3,6 +3,9 @@ import { server } from "../server";
 
 const newnoteapi = server + "/notes/create-notes";
 const usersnotes = server + "/notes/user-notes/";
+const specificticketUrl = server + "/notes/get_notes/";
+const Updatenotesurl = server + "/notes/update-notes/";
+const notedeleteapi = server + "/notes/deleteproduct/";
 
 export const createNewNote = (frmData) => {
     console.log("from api", frmData);
@@ -40,17 +43,37 @@ export const createNewNote = (frmData) => {
     });
   };
 
-  // export const getusersAllTickets = () => {
-  //   return new Promise(async (resolve, reject) => {
-  //     try {
-  //       const result = await axios.get(userTicketUrl, {
-  //         headers: {
-  //           Authorization: sessionStorage.getItem("accessJWT"),
-  //         },
-  //       }); 
-  //       resolve(result);
-  //     } catch (error) {
-  //       reject(error);
-  //     }
-  //   });
-  // };
+  export const getSingleTicket = (_id) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        // const frmData = await Object.assign({  "userId" :  });
+        // console.log(frmData);
+        const result = await axios.get(specificticketUrl + _id, {
+          headers: {
+            userid: localStorage.getItem("userId").replace(/^"|"$/g, ''),
+          },
+        });
+        resolve(result);
+        // console.log(result);
+      } catch (error) {
+        // console.log(error.message);
+        reject(error);
+      }
+    });
+  };
+
+  export const updateReplyTicket = (_id, msgObj) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await axios.put(Updatenotesurl + _id, msgObj, {
+          // headers: {
+          //   Authorization: sessionStorage.getItem("accessJWT"),
+          // },
+        }); 
+        resolve(result.data);
+      } catch (error) {
+        // console.log(error.message);
+        reject(error);
+      }
+    });
+  };

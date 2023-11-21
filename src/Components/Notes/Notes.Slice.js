@@ -5,6 +5,8 @@ const initialState = {
   status: "",
   notes: "",
   noteinput:"",
+  editnotes:"",
+  previousnotevalues:"",
 };
 
 const tempnotesSlice = createSlice({
@@ -19,6 +21,18 @@ const tempnotesSlice = createSlice({
         state.noteinput = "success";
         state.notes = payload;
       },
+    tempnotesEditedvalues: (state, { payload }) => {
+        state.editnotes = payload;
+      },
+    prventsavenotes: (state, { payload }) => {
+        state.previousnotevalues = payload;
+    },
+    cleartempnotesinputandprventnotessave: (state) => {
+      state.noteinput = "";
+      state.notes = "";
+      state.previousnotevalues = "";
+      state.editnotes = "";
+    },
     tempnotesgetvalues: (state, { payload }) => {
       state.isLoading = false;
       state.noteinput = "success";
@@ -40,6 +54,12 @@ const tempnotesSlice = createSlice({
       state.isLoading = false;
       state.status = payload;
       state.notes="";
+    },
+    clearallstate: (state) => {
+      state.isLoading = false;
+      state.status = "";
+      state.notes="";
+      state.noteinput = "";
     },
     clearStatus: (state) => {
       state.status = "";
@@ -63,6 +83,10 @@ export const {
   openNewNoteSuccess,
   openNewNoteFail,
   clearStatus,
+  clearallstate,
+  tempnotesEditedvalues,
+  prventsavenotes,
+  cleartempnotesinputandprventnotessave,
 } = actions;
 
 export default reducer;

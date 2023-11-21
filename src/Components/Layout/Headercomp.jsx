@@ -3,11 +3,16 @@ import { Link } from "react-router-dom";
 import styles from "../../styles/styles";
 import logo from "../../Assests/Sitelogo/logo.png";
 import {userlogedout} from "../Login/Login.Slice";
+import {clearallstate} from "../Notes/Notes.Slice";
 import { useSelector, useDispatch } from "react-redux";
+import {clearallnotestate} from "../Mynotes/Mynotes.Slice";
 const Headercomp = () => {
   const dispatch = useDispatch();
   const UserLogout=()=>{
           dispatch(userlogedout());
+          dispatch(clearallstate());
+          dispatch(clearallnotestate());
+          localStorage.removeItem('userId');
   }
   return (
     <div>

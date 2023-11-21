@@ -14,6 +14,8 @@ export const accessusertologin = (values) => async (dispatch) => {
         toast.success('Log in Success')
         // console.log(isAuth.data)
         dispatch(Putuserdata(isAuth.data));
+        console.log(isAuth);
+        localStorage.setItem('userId',  JSON.stringify(isAuth.data._id));
          window.location.href="/my-notes";
       } 
     } catch (error) {

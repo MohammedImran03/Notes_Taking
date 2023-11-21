@@ -13,24 +13,40 @@ import { tempnotesPending,
     tempnotesError,
     clearresponse,
     DeleteComplete,
-    clearStatus} from './Notes.Slice';
+    clearStatus,
+    clearallstate} from './Notes.Slice';
 import './Notes.css';
 import Spinner from "../Loader/Spinner";
 import {openNewTicket} from "./Notes.Action";
 import toast, { Toaster } from 'react-hot-toast';
+import {fetchusersAllNotes} from '../Mynotes/Mynotes.Action';
+import {clearallnotestate} from '../Mynotes/Mynotes.Slice';
 
 const Notes = () => {
     const [notesscreen, setNotescreen] = useState(false);
     const [deletenotes, setDeletenotes] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [text, setText] = useState("Untitled...");
     const [smallscreennotes,setSmallscreennotes]=useState({});
     const dispatch=useDispatch();
-    const { isLoading, status, notes} = useSelector(
+    const { isLoading, status, notes,noteinput} = useSelector(
         (state) => state.tempnotes
         );
     const { isAuth,userdata } = useSelector((state) => state.login);
     const NotesScreenmodal=()=>{
         setNotescreen(!notesscreen);
     }
+    const handleDoubleClick = () => {
+      setIsEditing(true);
+    };
+    const handleChange = (event) => {
+      setText(event.target.value);
+    };
+    const handleBlur = () => {
+      setIsEditing(false);
+      // Save the changes or perform any required actions here
+    };
+    let notetitle='';
     function handlesolution(e){
         if (e) {
           const NotesCopy = {
@@ -52,6 +68,8 @@ const Notes = () => {
         dispatch(clearresponse());
         dispatch(DeleteComplete());
         setDeletenotes(false);
+        setNotescreen(!notesscreen);
+        setText("Untitled...");
   }
   async function  NewnoteSubmit(){
     // console.log("nil note",smallscreennotes.notes);
@@ -59,14 +77,30 @@ const Notes = () => {
         console.log("nil note");
         toast.error('Empty Notes Can not be created');
     }
+    if(text=="Untitled..."){
+     notetitle= notes.substring(0, 5);
+    }else{
+      notetitle=text;
+    }
     const values = await Object.assign({  "userId" : userdata._id ,
+    "title" : notetitle,
     "notes": notes,
-    "link": "hiii",
-    "filesattached":"hiiii"});
+    "link": [],
+    "filesattached":[]});
     // console.log(values);
     if(notes){
         dispatch(openNewTicket(values));
         setNotescreen(!notesscreen);
+          if(noteinput === "success"){
+              //  dispatch(clearallstate());
+            setTimeout(()=>{
+              dispatch(clearStatus()); 
+               },1000);
+              dispatch(clearallnotestate());
+              dispatch(fetchusersAllNotes(userdata._id));
+              // window.location.reload(true);
+           
+          }
     }
   }
   function Closestatustab(){
@@ -123,7 +157,6 @@ const Notes = () => {
               Todo Tags here.
             </p>
           </a>
-
           <a 
             class="block max-w-sm p-4 bg-green-500 border border-gray-200 rounded-lg shadow hover:bg-green-400 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
           >
@@ -142,16 +175,27 @@ const Notes = () => {
           {/* <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
   Toggle modal
 </button> */}
-{notesscreen  ? <div className="flex justify-center"><div
+{notesscreen  ? <div className="flex justify-cente"><div
           className="Modalnotes fixed w-1/2 h-3/4"
         >
 <div className="flex flex-col justify-center bg-indigo-500 rounded-sm">
 <div className="bg-white text-black p-1 m-3">
 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                   <div class="flex items-center justify-between p-2 md:p-2 border-b rounded-t dark:border-gray-600">
-                    <h3 class="md:text-xl text-sm font-semibold text-gray-900 dark:text-white">
-                      Untitled...
-                    </h3>
+                    <div class="md:text-xl text-sm font-semibold text-gray-900 dark:text-white"
+                    onClick={handleDoubleClick}>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={text}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className="text-blue-500"
+                      />
+                    ) : (
+                      <span>{text}</span>
+                    )}
+                    </div>
                     <div>
                     {notes &&   <button onClick={clearnotes} class="mr-2 inline-flex items-center px-1 text-lg font-medium text-center text-white bg-red-600 rounded-lg focus:ring-4 focus:ring-red-200 dark:focus:ring-red-700 hover:bg-red-500">
       Clear

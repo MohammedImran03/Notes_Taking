@@ -10,16 +10,22 @@ import { tempnotesPending,
     tempnotesError,
     clearresponse,
     DeleteComplete,
-    clearStatus} from '../Notes/Notes.Slice';
-    import {openNewTicket} from "../Notes/Notes.Action";
+    clearStatus,
+    clearallstate} from '../Notes/Notes.Slice';
+import {openNewTicket} from "../Notes/Notes.Action";
 import toast, { Toaster } from 'react-hot-toast';
+import {useNavigate} from "react-router-dom";
 
 const Writer = () => {
     const [deletenotes, setDeletenotes] = useState(false);
     const dispatch=useDispatch();
+    const navigate = useNavigate();
+    // const goBack = () => {
+    //   navigate(-1);
+    // };
     const [smallscreennotes,setSmallscreennotes]=useState({});
     const { isAuth,userdata } = useSelector((state) => state.login);
-    const { isLoading, status, notes} = useSelector(
+    const { isLoading, status, notes,noteinput} = useSelector(
         (state) => state.tempnotes
         );
         function handlesolution(e){
@@ -47,16 +53,25 @@ const Writer = () => {
       async function  NewnoteSubmit(){
         // console.log("nil note",smallscreennotes.notes);
         if(!notes){
-            console.log("nil note");
+            // console.log("nil note");
             toast.error('Empty Notes Can not be created');
         }
         const values = await Object.assign({  "userId" : userdata._id ,
         "notes": notes,
-        "link": "hiii",
-        "filesattached":"hiiii"});
+        "link": [],
+        "filesattached":[]});
         // console.log(values);
         if(notes){
             dispatch(openNewTicket(values));
+            if(noteinput === "success"){
+              dispatch(clearallstate());
+           setTimeout(()=>{
+             dispatch(clearStatus()); 
+            //  window.location.reload(true);
+             navigate(-1);
+           },1000);
+         }
+
         }
       }
       function Closestatustab(){
