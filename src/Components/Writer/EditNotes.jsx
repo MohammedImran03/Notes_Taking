@@ -81,6 +81,8 @@ const EditNotes = () => {
   };
     const goBack = () => {
       dispatch(cleartempnotesinputandprventnotessave());
+      dispatch(clearallnotestate());
+      dispatch(fetchusersAllNotes(userdata._id)); 
       navigate(-1);
     };
     const [smallscreennotes,setSmallscreennotes]=useState({});
