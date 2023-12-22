@@ -24,6 +24,8 @@ import {clearreplymsg,clearallnotestate} from '../Mynotes/Mynotes.Slice';
 const EditNotes = () => {
     const [deletenotes, setDeletenotes] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+    const [updateornot,setUpdateornot] = useState(false);
+    const [backorforwardbtn,setBackorforwardbtn]=useState(false);
     const [text, setText] = useState("");
     const [beforeeditnotes,setBeforeeditnotes]=useState("");
     const [defaultnotesvalue,setDefaultnotesvalue]=useState("");
@@ -52,19 +54,24 @@ const EditNotes = () => {
         // setText(getSingleTicket.title);
         // dispatch(prventsavenotes(selectedTicket.notes));
         // setBeforeeditnotes(selectedTicket.notes);
+        // console.log("Why going backward while file is in edit:")
     }, []);
-    // useEffect(()=>{
-    //   dispatch(prventsavenotes(selectedTicket.notes));
-    //   // reload();
-    // },[]);
-    // function reload(){
-    //   setTimeout(()=>{
-    //     window.location.reload();
-    //   },1000);
-    // }
-    // console.log(editnotes);
-  //   console.log(beforeeditnotes);
-  //  console.log(editnotes);
+    useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      const unsavedChanges = true; // Set this flag based on your logic
+      if (unsavedChanges) {
+        const message = 'You have unsaved changes. Are you sure you want to leave?';
+        event.returnValue = message; // Standard for most browsers
+        return message; // For some older browsers
+      }
+    };
+    // Add event listener for the beforeunload event
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []); // Empty dependency array ensures the effect runs only once on mount
     let notetitle=selectedTicket.title;
     // console.log("text",text , "notetile", notetitle)
   const handleDoubleClick = () => {
@@ -79,11 +86,23 @@ const EditNotes = () => {
     setIsEditing(false);
     // Save the changes or perform any required actions here
   };
+
     const goBack = () => {
-      dispatch(cleartempnotesinputandprventnotessave());
-      dispatch(clearallnotestate());
-      dispatch(fetchusersAllNotes(userdata._id)); 
-      navigate(-1);
+      if(notes==previousnotevalues && editnotes=="" || previousnotevalues==editnotes){
+        dispatch(cleartempnotesinputandprventnotessave());
+        dispatch(clearallnotestate());
+        dispatch(fetchusersAllNotes(userdata._id)); 
+        navigate(-1);
+      }else{
+             setUpdateornot(true);
+            //  console.log("Why Save Save");
+        // toast(
+        //   "Cannot Navigate to other page,\nSince Changes are done in the note\nSave the changes and ",
+        //   {
+        //     duration: 2000,
+        //   }
+        // );
+      }
     };
     const [smallscreennotes,setSmallscreennotes]=useState({});
  
@@ -130,11 +149,12 @@ const EditNotes = () => {
       });
       // console.log(_id,values);
             dispatch(replyOnTicket(_id,values));
-            dispatch(clearreplymsg());
             dispatch(cleartempnotesinputandprventnotessave());
+            dispatch(clearreplymsg());
             dispatch(fetchSingleTicket(_id));
             dispatch(clearallnotestate());
             dispatch(fetchusersAllNotes(userdata._id));
+            setUpdateornot(false);
           //   if(noteinput === "success"){
           //     dispatch(clearallstate());
           //  setTimeout(()=>{
@@ -153,7 +173,42 @@ const EditNotes = () => {
         return dateTime;
       }
   return (
-    <div>    <div>
+    <div>  
+
+{updateornot ? 
+<div className='flex justify-center'>
+<div id="toast-interactive" class="w-full  max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow dark:bg-gray-800 dark:text-gray-400">
+    <div class="flex">
+        <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:text-blue-300 dark:bg-blue-900">
+            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 1v5h-5M2 19v-5h5m10-4a8 8 0 0 1-14.947 3.97M1 10a8 8 0 0 1 14.947-3.97"/>
+            </svg>
+            <span class="sr-only">Refresh icon</span>
+        </div>
+        <div class="ms-3 text-sm font-normal">
+            <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-white">Update available</span>
+            <div class="mb-2 text-sm font-normal">Notes Changes have made, Do you want to save the Changes?</div> 
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <a onClick={EditednoteSubmit} class="inline-flex justify-center w-full px-2 py-1.5 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">Yes</a>
+                </div>
+                <div>
+                    <a  class="inline-flex justify-center w-full px-2 py-1.5 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-600 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700">No</a> 
+                </div>
+            </div>    
+        </div>
+        <button onClick={()=>setUpdateornot(!updateornot)} type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white items-center justify-center flex-shrink-0 text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700">
+            <span class="sr-only">Close</span>
+            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+            </svg>
+        </button>
+    </div>
+</div>
+</div>
+: ""
+}
+       <div>
     <Toaster position='top-center' reverseOrder={false}></Toaster>
 <div className='upperheight bg-slate-400'><button onClick={goBack} class="inline-flex items-center p-1 text-lg font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-400 ml-2" ><IoMdArrowRoundBack className='ml-1 mr-1'/> Go Back</button>
 </div>
@@ -211,10 +266,10 @@ const EditNotes = () => {
     <div>
      <button 
      disabled={!editnotes && notes == previousnotevalues }
-      onClick={EditednoteSubmit} type="submit" class="inline-flex mr-1 md:mr-2 items-center px-1 text-lg font-medium text-center  text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+      onClick={EditednoteSubmit} type="submit" class="inline-flex mr-1 md:mr-2 items-center px-1 text-xs md:text-lg font-medium text-center  text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
          Save Changes
      </button>
-     <button onClick={clearnotes} class="mr-1 md:mr-2 inline-flex items-center px-1 text-lg font-medium text-center text-white bg-red-600 rounded-lg focus:ring-4 focus:ring-red-200 dark:focus:ring-red-700 hover:bg-red-500">
+     <button onClick={clearnotes} class="mr-1 md:mr-2 inline-flex items-center px-1 text-xs md:text-lg font-medium text-center text-white bg-red-600 rounded-lg focus:ring-4 focus:ring-red-200 dark:focus:ring-red-700 hover:bg-red-500">
 Delete Notes
 </button> 
 </div>
@@ -242,6 +297,7 @@ Delete Notes
 </div>
 
 </div>
+
 {deletenotes && <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
 <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -271,7 +327,8 @@ Delete Notes
 </div>
 </div>}
 
-</div></div>
+</div>
+</div>
   )
 }
 

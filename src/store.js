@@ -6,6 +6,7 @@ import loginReducer from "./Components/Login/Login.Slice";
 import { userReducer } from "./Redux/reducer/user";
 import tempnotesSlice from "./Components/Notes/Notes.Slice";
 import ticketsReducer from "./Components/Mynotes/Mynotes.Slice";
+import tempTaskSlice from "./Components/Tasks/Task.Slice";
 const persistConfig = {
     key: 'root',
     version: 1,
@@ -18,6 +19,7 @@ const persistConfig = {
     user: userReducer,
     tempnotes:tempnotesSlice,
     Usernotes: ticketsReducer,
+    tasks:tempTaskSlice,
   });
 
   const persistedReducer = persistReducer(persistConfig, reducer)

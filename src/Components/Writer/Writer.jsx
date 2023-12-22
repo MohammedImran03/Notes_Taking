@@ -65,6 +65,7 @@ const Writer = () => {
             dispatch(openNewTicket(values));
             if(noteinput === "success"){
               dispatch(clearallstate());
+             
            setTimeout(()=>{
              dispatch(clearStatus()); 
             //  window.location.reload(true);
@@ -137,8 +138,6 @@ const Writer = () => {
        </div>
    </div>
 {/* </form> */}
-
-
 
 </div>
 {deletenotes && <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">

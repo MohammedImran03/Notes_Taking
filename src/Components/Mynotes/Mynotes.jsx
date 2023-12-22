@@ -1,23 +1,27 @@
 import React, { useState, useEffect } from "react";
 import {fetchusersAllNotes} from "./Mynotes.Action";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import {useNavigate, Link } from "react-router-dom";
 import styles from "../../styles/styles";
 import {deleteProduct} from "./Mynotes.Action";
 import toast, { Toaster } from 'react-hot-toast';
-// import {fetchusersAllNotes} from './Mynotes.Action';
 import {clearallnotestate} from './Mynotes.Slice';
 import {clearallstate} from './Mynotes.Slice';
-import {clearStatus} from '../Notes/Notes.Slice';
+import {clearStatus, miniscreenactivation,
+  miniscreendeactivate,} from '../Notes/Notes.Slice';
 const Mynotes = () => {
   const dispatch = useDispatch();
   const { searchTicketList, isLoading, error } = useSelector((state) => state.Usernotes);
   const { userdata } = useSelector((state) => state.login);
+  const {notes} = useSelector(
+    (state) => state.tempnotes
+    );
   const [str, setStr] = useState("");
   const [displaymyhistorycards, setdisplaymyhistorycards] = useState({});
   const [filteredmyhistorycards, setfilteredmyhistorycards] = useState({});
   const [deletenotes, setDeletenotes] = useState(false);
   const [deleteid,setDeleteid]=useState("");
+  const navigate = useNavigate();
   // const [data, setData] = useState([]);
 
   // useEffect(() => {
@@ -42,6 +46,7 @@ const Mynotes = () => {
   //   // }
   // }, [str]);
   useEffect(() => {
+    dispatch(clearallnotestate());
     if (searchTicketList.length == 0) {
       dispatch(fetchusersAllNotes(userdata._id));
     } else {
@@ -49,14 +54,16 @@ const Mynotes = () => {
       setfilteredmyhistorycards(searchTicketList);
     }
   }, [searchTicketList]);
-
+// useEffect(()=>{
+//  if(searchTicketList.length)
+// },[]);
   function showdatetime(value){
     var date = value.split('T')[0];
     var time = value.split('T')[1].split('.')[0];
     var dateTime = date + '/' + time;
     return dateTime;
   }
-  
+
   function handleInput(e) {
     const { value } = e.target;
     setStr(value);
@@ -102,6 +109,20 @@ const Mynotes = () => {
     setDeleteid("");   
     //  console.log("confirm operation"+ deleteid);
   }
+  // function ReadPagenavigate(id){
+  //   if(notes){
+  //      toast(
+  //       "New note have been created but not yet saved.\n",
+  //       {
+  //         duration: 3000,
+  //       }
+  //     );
+  //      dispatch(miniscreenactivation());
+  //   }else{
+  //     navigate('/notes-editor/'+id);
+  //     dispatch(miniscreendeactivate());
+  //   }
+  // }
   return (<>
     <Toaster position='top-center' reverseOrder={false}></Toaster>
   <div className="flex justify-center"><span className="text-lg font-bold text-black border-b-2 border-black mb-2">My Notes</span></div>
@@ -148,7 +169,8 @@ const Mynotes = () => {
                     .slice(0)
                     .reverse()
                     .map((val,ind) => {
-                      return <div class={`m-2 max-w-sm rounded overflow-hidden shadow-lg ${styles.defaultColor} w-80`}>
+                      return
+                       <div class={`m-2 max-w-sm rounded overflow-hidden shadow-lg ${styles.defaultColor} w-80`}>
                       <div class="px-3 py-2">
                         <div className="flex justify-between">
                         <div className="font-bold text-lg pl-1">{val.title?.slice(0, 10)}</div> 
@@ -164,9 +186,13 @@ const Mynotes = () => {
                         Last Seen : {val.LastEdited&& showdatetime(val.LastEdited)}
                         </div>}
                       <div class="px-6 pb-2 mt-1 flex justify-between align-bottom">
-                      <Link to={`/notes-editor/${val._id}`}><button class="mr-1 md:mr-2 inline-flex items-center px-1 text-lg font-medium text-center text-white bg-yellow-500 rounded-lg focus:ring-4 focus:ring-red-200 dark:focus:ring-yellow-600 hover:bg-yellow-300">
+                      <Link to={`/notes-editor/${val._id}`}>
+                        <button 
+                        // onClick={()=>ReadPagenavigate(val._id)}
+                       class="mr-1 md:mr-2 inline-flex items-center px-1 text-lg font-medium text-center text-white bg-yellow-500 rounded-lg focus:ring-4 focus:ring-red-200 dark:focus:ring-yellow-600 hover:bg-yellow-300">
                           View
-                      </button></Link>
+                      </button>
+                      </Link>
                       <button
                       onClick={() => clearnotes (val._id)}
                       // onClick={(val._id)=>Deletenote}
@@ -174,7 +200,9 @@ const Mynotes = () => {
                           Delete
                       </button>
                       </div>
-                    </div> }) ): <div className={`${styles.defaultColor} text-black pt-4`}>{isLoading ? "Loading..." : "Create New Notes to add it in your account."}</div>
+                    </div> 
+                    }) ):
+                     <div className={`${styles.defaultColor} text-black pt-4`}>{isLoading ?  "Create New Notes to add it in your Page.":""}</div>
          } 
         </div>
     </div>

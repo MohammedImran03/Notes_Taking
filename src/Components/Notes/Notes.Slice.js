@@ -7,14 +7,24 @@ const initialState = {
   noteinput:"",
   editnotes:"",
   previousnotevalues:"",
+  miniscreen:false,
+  readnotes:"",
 };
 
 const tempnotesSlice = createSlice({
   name: "tempSlice",
   initialState,
   reducers: {
+    miniscreenactivation: (state) => {
+      state.miniscreen = true;
+    },
+    miniscreendeactivate: (state) => {
+      state.miniscreen = false;
+    },
     tempnotesPending: (state) => {
       state.isLoading = true;
+      state.notes = "";
+      state.previousnotevalues = "";
     },
     tempnotesInputvalues: (state, { payload }) => {
         state.isLoading = false;
@@ -31,6 +41,9 @@ const tempnotesSlice = createSlice({
       state.noteinput = "";
       state.notes = "";
       state.previousnotevalues = "";
+      state.editnotes = "";
+    },
+    cleareditnotestopreventbug: (state) => {
       state.editnotes = "";
     },
     tempnotesgetvalues: (state, { payload }) => {
@@ -87,6 +100,9 @@ export const {
   tempnotesEditedvalues,
   prventsavenotes,
   cleartempnotesinputandprventnotessave,
+  miniscreenactivation,
+  miniscreendeactivate,
+  cleareditnotestopreventbug,
 } = actions;
 
 export default reducer;

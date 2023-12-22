@@ -74,7 +74,7 @@ const Notes = () => {
   async function  NewnoteSubmit(){
     // console.log("nil note",smallscreennotes.notes);
     if(!notes){
-        console.log("nil note");
+        // console.log("nil note");
         toast.error('Empty Notes Can not be created');
     }
     if(text=="Untitled..."){
@@ -129,7 +129,7 @@ const Notes = () => {
     <div className="Homenotes">
       <div className="max-w-screen-lg p-4 mx-auto flex justify-center w-full">
       <Toaster position='top-center' reverseOrder={false}></Toaster>
-        <div className="flex:none grid sm:grid-cols-1 md:grid-cols-2 sm:gap-4 md:gap-8 lg:gap-8 lg:grid-cols-3 pt-6 text-center">
+        <div className="flex:none grid sm:grid-cols-1 md:grid-cols-2 sm:gap-4 md:gap-8 lg:gap-8 lg:grid-cols-2 pt-6 text-center">
           <button
              onClick={NotesScreenmodal}
             class="block max-w-sm p-4 bg-indigo-500 border border-gray-200 rounded-lg shadow hover:bg-indigo-400 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
@@ -139,25 +139,25 @@ const Notes = () => {
               <IoMdAdd size={100} />
             </h5>
             <h1 class="text-2xl font-bold text-black dark:text-gray-400">
-              Create Notes.
+              Create Notes
             </h1>
             <p class="text-sm text-start text-black dark:text-gray-400 pt-2">
               Notes here are stored permanently.
             </p>
           </button>
-          <a class="block max-w-sm p-4 bg-orange-500 border border-gray-200 rounded-lg shadow hover:bg-orange-400 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+          <a href="/my-task" class="block max-w-sm p-4 bg-orange-500 border border-gray-200 rounded-lg shadow hover:bg-orange-400 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
           >
             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white flex justify-center">
               <IoMdAdd size={100} />
             </h5>
             <h1 class="text-2xl font-bold text-black dark:text-gray-400">
-              Tags.
+              Tasks
             </h1>
             <p class="text-sm text-start text-black dark:text-gray-400 pt-2">
               Todo Tags here.
             </p>
           </a>
-          <a 
+          {/* <a 
             class="block max-w-sm p-4 bg-green-500 border border-gray-200 rounded-lg shadow hover:bg-green-400 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
           >
             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white flex justify-center">
@@ -169,13 +169,13 @@ const Notes = () => {
             <p class="text-sm text-start text-black dark:text-gray-400 pt-2">
               Reminder Notes.
             </p>
-          </a>
+          </a> */}
         </div>
         <div className="flex justify-center">
           {/* <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
   Toggle modal
 </button> */}
-{notesscreen  ? <div className="flex justify-cente"><div
+{notesscreen  ? <div className="flex justify-center"><div
           className="Modalnotes fixed w-1/2 h-3/4"
         >
 <div className="flex flex-col justify-center bg-indigo-500 rounded-sm">

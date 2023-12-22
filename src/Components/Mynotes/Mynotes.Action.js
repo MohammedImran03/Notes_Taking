@@ -14,7 +14,7 @@ import {
   deleteTicketSuccess,
  deletenotefail, 
   } from './Mynotes.Slice';
-import {tempnotesInputvalues,prventsavenotes} from '../Notes/Notes.Slice';
+import {tempnotesInputvalues,prventsavenotes,tempnotesPending} from '../Notes/Notes.Slice';
 import { server } from "../../server";
 import toast, { Toaster } from 'react-hot-toast';
 import axios from "axios";
@@ -46,6 +46,7 @@ export const fetchusersAllNotes = (formData) => async (dispatch) => {
 //Actions for single ticket only
 export const fetchSingleTicket = (_id) => async (dispatch) => {
     dispatch(fetchSingleTicketLoading());
+    dispatch(tempnotesPending());
     try {
       const result = await getSingleTicket(_id);
        console.log(result);
